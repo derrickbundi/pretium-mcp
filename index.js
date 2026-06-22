@@ -5,6 +5,7 @@ config({ path: join(dirname(fileURLToPath(import.meta.url)), ".env") });
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express from "express";
 import axios from "axios";
 import { registerRatesTool } from "./tools/rates.js";
@@ -22,9 +23,7 @@ const api = axios.create({
   headers: { "x-api-key": process.env.PRETIUM_API_KEY },
 });
 
-const transports = {};
-
-app.get("/sse", async (req, res) => {
+function createServer() {
   const server = new McpServer({
     name: "pretium-mcp",
     version: "1.0.0",
@@ -35,7 +34,16 @@ app.get("/sse", async (req, res) => {
   registerConfirmOrderTool(server, api);
   registerOrderStatusTool(server, api);
 
+  return server;
+}
+
+// SSE transport (legacy)
+const transports = {};
+
+app.get("/sse", async (req, res) => {
+  const server = createServer();
   const transport = new SSEServerTransport("/messages", res);
+
   transports[transport.sessionId] = transport;
 
   res.on("close", () => {
@@ -56,8 +64,18 @@ app.post("/messages", async (req, res) => {
   await transport.handlePostMessage(req, res);
 });
 
-const PORT = process.env.PORT || 3000;
+// Streamable HTTP transport (modern - preferred by Cursor)
+app.post("/mcp", async (req, res) => {
+  const server = createServer();
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined, // stateless
+  });
 
+  await server.connect(transport);
+  await transport.handleRequest(req, res, req.body);
+});
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Pretium MCP server running on port ${PORT}`);
 });
