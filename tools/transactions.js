@@ -23,11 +23,9 @@ export function registerConfirmOrderTool(server, api) {
       type: z.enum(["mobile", "paybill", "bank_transfer", "buy_goods"])
         .describe("Payment type to determine which fields are required"),
       network: z.string()
-        .optional()
-        .describe("Blockchain network e.g. celo, base, polygon, bnb, solana, mainnet. Required for type=blockchain"),
+        .describe("Blockchain network e.g. celo, base, bnb, solana"),
       hash: z.string()
-        .optional()
-        .describe("Transaction hash from the blockchain. Required for type=blockchain"),
+        .describe("Transaction hash from the blockchain"),
       shortcode: z.string()
         .optional()
         .describe("Paybill or till number. Required for type=paybill or type=buy_goods or type=mobile"),
@@ -47,8 +45,12 @@ export function registerConfirmOrderTool(server, api) {
         .optional()
         .describe("Payment narration for bank transfers"),
     },
-    async ({ type, network, hash, shortcode, mobile_network, bank_code, account_number, account_name, narration }) => {
-      const basePayload = { type };
+    async ({ type, internal_reference_id, network, hash, shortcode, mobile_network, bank_code, account_number, account_name, narration }) => {
+      if (!network) throw new Error("network is required");
+      if (!hash) throw new Error("hash is required");
+
+      const settlement = { internal_reference_id, network, hash };
+      const basePayload = { type, ...settlement };
 
       let payload;
       switch (type) {
