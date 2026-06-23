@@ -22,6 +22,8 @@ export function registerConfirmOrderTool(server, api) {
     {
       type: z.enum(["mobile", "paybill", "bank_transfer", "buy_goods"])
         .describe("Payment type to determine which fields are required"),
+      internal_reference_id: z.string()
+        .describe("Internal reference ID returned when the order was created"),
       network: z.string()
         .describe("Blockchain network e.g. celo, base, bnb, solana"),
       hash: z.string()
@@ -46,6 +48,7 @@ export function registerConfirmOrderTool(server, api) {
         .describe("Payment narration for bank transfers"),
     },
     async ({ type, internal_reference_id, network, hash, shortcode, mobile_network, bank_code, account_number, account_name, narration }) => {
+      if (!internal_reference_id) throw new Error("internal_reference_id is required");
       if (!network) throw new Error("network is required");
       if (!hash) throw new Error("hash is required");
 
