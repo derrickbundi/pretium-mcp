@@ -13,6 +13,7 @@ import {
   registerCreateOrderTool,
   registerConfirmOrderTool,
   registerOrderStatusTool,
+  registerValidateBankAccountTool
 } from "./tools/transactions.js";
 
 const app = express();
@@ -33,11 +34,11 @@ function createServer() {
   registerCreateOrderTool(server, api);
   registerConfirmOrderTool(server, api);
   registerOrderStatusTool(server, api);
+  registerValidateBankAccountTool(server, api);
 
   return server;
 }
 
-// SSE transport (legacy)
 const transports = {};
 
 app.get("/sse", async (req, res) => {
@@ -64,11 +65,10 @@ app.post("/messages", async (req, res) => {
   await transport.handlePostMessage(req, res);
 });
 
-// Streamable HTTP transport (modern - preferred by Cursor)
 app.post("/mcp", async (req, res) => {
   const server = createServer();
   const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined, // stateless
+    sessionIdGenerator: undefined,
   });
 
   await server.connect(transport);
@@ -81,7 +81,6 @@ app.get("/mcp", async (req, res) => {
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders();
 
-  // keep connection alive
   const keepAlive = setInterval(() => {
     res.write(": ping\n\n");
   }, 15000);

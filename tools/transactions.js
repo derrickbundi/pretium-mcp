@@ -5,8 +5,8 @@ export function registerCreateOrderTool(server, api) {
     "create_order",
     "Create a new payment order with a specified amount and currency",
     {
-      amount: z.number().positive().describe("Amount to send e.g. 100, 50.5"),
-      currency_code: z.string().describe("Currency code e.g. KES, UGX"),
+      amount: z.number().positive().describe("Amount to send e.g. 100, 5000"),
+      currency_code: z.string().describe("Currency code e.g. KES, UGX, NGN"),
     },
     async ({ amount, currency_code }) => {
       const { data } = await api.post(`/create-order`, { currency_code, amount, });
@@ -76,9 +76,10 @@ export function registerConfirmOrderTool(server, api) {
 
         case "bank_transfer":
           if (!bank_code) throw new Error("bank_code is required for type=bank_transfer");
+          if (!bank_name) throw new Error("bank_code is required for type=bank_transfer");
           if (!account_number) throw new Error("account_number is required for type=bank_transfer");
           if (!account_name) throw new Error("account_name is required for type=bank_transfer");
-          payload = { ...basePayload, bank_code, account_number, account_name, ...(narration && { narration }) };
+          payload = { ...basePayload, bank_code, $bank_name, account_number, account_name, ...(narration && { narration }) };
           break;
 
         default:
@@ -116,6 +117,33 @@ export function registerOrderStatusTool(server, api) {
       if (internal_reference_id) params.internal_reference_id = internal_reference_id;
 
       const { data } = await api.get(`/order-status`, { params });
+      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+    }
+  );
+}
+
+export function registerValidateBankAccountTool(server, api) {
+  server.tool(
+    "validate_bank_account",
+    "Validate a bank account by providing the bank name, account number, and target country",
+    {
+      bank_code: z.string().describe("Bank name or swift code e.g. KCB, Opay"),
+      account_number: z.string().describe("Bank account number to validate"),
+      country_code: z.enum(["KES", "UGX", "NGN"]).describe("Target country code e.g. KES, UGX, NGN"),
+    },
+    async({ bank_code, account_number, country_code }) => {
+      if (!bank_code || !account_number || !country_code) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "bank_name, account_number, and country_code are required" }) }],
+        };
+      }
+
+      const { data } = await api.post(`/validate-bank-account`, {
+        bank_code,
+        account_number,
+        country_code,
+      });
+
       return { content: [{ type: "text", text: JSON.stringify(data) }] };
     }
   );
