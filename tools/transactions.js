@@ -129,19 +129,19 @@ export function registerValidateBankAccountTool(server, api) {
     {
       bank_code: z.string().describe("Bank name or swift code e.g. KCB, Opay"),
       account_number: z.string().describe("Bank account number to validate"),
-      country_code: z.enum(["KES", "UGX", "NGN"]).describe("Target country code e.g. KES, UGX, NGN"),
+      currency_code: z.enum(["KES", "UGX", "NGN"]).describe("Target country code e.g. KES, UGX, NGN"),
     },
-    async({ bank_code, account_number, country_code }) => {
-      if (!bank_code || !account_number || !country_code) {
+    async({ bank_name, account_number, currency_code }) => {
+      if (!bank_code || !account_number || !currency_code) {
         return {
-          content: [{ type: "text", text: JSON.stringify({ error: "bank_name, account_number, and country_code are required" }) }],
+          content: [{ type: "text", text: JSON.stringify({ error: "bank_name, account_number, and currency_code are required" }) }],
         };
       }
 
       const { data } = await api.post(`/validate-bank-account`, {
-        bank_code,
+        bank_name,
         account_number,
-        country_code,
+        currency_code,
       });
 
       return { content: [{ type: "text", text: JSON.stringify(data) }] };
