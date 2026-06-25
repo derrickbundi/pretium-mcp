@@ -127,12 +127,12 @@ export function registerValidateBankAccountTool(server, api) {
     "validate_bank_account",
     "Validate a bank account by providing the bank name, account number, and target country",
     {
-      bank_code: z.string().describe("Bank name or swift code e.g. KCB, Opay"),
+      bank_name: z.string().describe("Bank name or swift code e.g. KCB, Opay"),
       account_number: z.string().describe("Bank account number to validate"),
       currency_code: z.enum(["KES", "UGX", "NGN"]).describe("Target country code e.g. KES, UGX, NGN"),
     },
     async({ bank_name, account_number, currency_code }) => {
-      if (!bank_code || !account_number || !currency_code) {
+      if (!bank_name || !account_number || !currency_code) {
         return {
           content: [{ type: "text", text: JSON.stringify({ error: "bank_name, account_number, and currency_code are required" }) }],
         };
