@@ -13,7 +13,8 @@ import {
   registerCreateOrderTool,
   registerConfirmOrderTool,
   registerOrderStatusTool,
-  registerValidateBankAccountTool
+  registerValidateBankAccountTool,
+  registerValidatePhoneNumberTool
 } from "./tools/transactions.js";
 
 const app = express();
@@ -35,6 +36,7 @@ function createServer() {
   registerConfirmOrderTool(server, api);
   registerOrderStatusTool(server, api);
   registerValidateBankAccountTool(server, api);
+  registerValidatePhoneNumberTool(server, api);
 
   return server;
 }

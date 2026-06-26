@@ -148,3 +148,30 @@ export function registerValidateBankAccountTool(server, api) {
     }
   );
 }
+
+export function registerValidatePhoneNumberTool(server, api) {
+  server.tool(
+    "validate_phone_number",
+    "Validate a phone number by providing the mobile number, mobile network, and target country",
+    {
+      mobile_network: z.string().describe("Mobile network to validate"),
+      phone_number: z.string().describe("Mobile number to validate"),
+      currency_code: z.enum(["KES", "UGX"]).describe("Target country code e.g. KES, UGX"),
+    },
+    async({mobile_network, phone_number, currency_code }) => {
+      if (!mobile_network || !phone_number || !currency_code) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "mobile_network, phone_number, and currency_code are required" }) }],
+        };
+      }
+
+      const { data } = await api.post(`/validate-phone-number`, {
+        mobile_network,
+        phone_number,
+        currency_code,
+      });
+
+      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+    }
+  );
+}
