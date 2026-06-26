@@ -156,7 +156,7 @@ export function registerValidatePhoneNumberTool(server, api) {
     {
       mobile_network: z.string().describe("Mobile network to validate"),
       phone_number: z.string().describe("Mobile number to validate"),
-      currency_code: z.enum(["KES", "UGX"]).describe("Target country code e.g. KES, UGX"),
+      currency_code: z.enum(["KES", "UGX"]).describe("REQUIRED: Target country currency code. KES for Kenya, UGX for Uganda. Must be explicitly provided — do not assume."),
     },
     async({mobile_network, phone_number, currency_code }) => {
       if (!mobile_network || !phone_number || !currency_code) {
