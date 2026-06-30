@@ -101,3 +101,64 @@ export function registerGetAgentTool(server, api) {
     }
   );
 }
+
+export function registerGetBalanceTool(server, api) {
+  server.tool(
+    "get_balance",
+    "Get the current balance for an agent — either fiat payout balance or stablecoin settlement balance. Requires the agent_id returned from register_agent.",
+    {
+      agent_id: z.string().describe("ID of the agent returned from register_agent"),
+      asset_type: z
+        .enum(["fiat", "stablecoin"])
+        .describe("Whether to fetch fiat balance or stablecoin balance"),
+      currency_code: z
+        .string()
+        .optional()
+        .describe("Currency code, e.g. KES, UGX, NGN — required when asset_type is 'fiat'"),
+      asset_code: z
+        .string()
+        .optional()
+        .describe("Stablecoin asset code, e.g. USDT, USDC — required when asset_type is 'stablecoin'"),
+      network: z
+        .string()
+        .optional()
+        .describe("Blockchain network, e.g. celo, base, bnb, solana — required when asset_type is 'stablecoin'"),
+    },
+    async ({ agent_id, asset_type, currency_code, asset_code, network }) => {
+      if (!agent_id) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
+        };
+      }
+      if (asset_type === "fiat" && !currency_code) {
+        return {
+          content: [
+            { type: "text", text: JSON.stringify({ error: "currency_code is required when asset_type is 'fiat'" }) },
+          ],
+        };
+      }
+      if (asset_type === "stablecoin" && !asset_code) {
+        return {
+          content: [
+            { type: "text", text: JSON.stringify({ error: "asset_code is required when asset_type is 'stablecoin'" }) },
+          ],
+        };
+      }
+      if (asset_type === "stablecoin" && !network) {
+        return {
+          content: [
+            { type: "text", text: JSON.stringify({ error: "network is required when asset_type is 'stablecoin'" }) },
+          ],
+        };
+      }
+      const { data } = await api.get(`/agent/balance`, {
+        params: {
+          agent_id,
+          asset_type,
+          ...(asset_type === "fiat" ? { currency_code } : { asset_code, network }),
+        },
+      });
+      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+    }
+  );
+}
