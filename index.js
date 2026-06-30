@@ -20,7 +20,9 @@ import {
   registerCreateAgentTool,
   registerCreateAgentSpendPolicyTool,
   registerGetAgentTool,
-  registerGetAgentBalanceTool
+  registerGetAgentBalanceTool,
+  registerAgentCreateStablecoinOrderTool,
+  registerAgentFiatOrderStatusTool
 } from "./tools/agent.js";
 
 const app = express();
@@ -47,6 +49,8 @@ function createServer() {
   registerCreateAgentSpendPolicyTool(server, api);
   registerGetAgentTool(server, api);
   registerGetAgentBalanceTool(server, api);
+  registerAgentCreateStablecoinOrderTool(server, api);
+  registerAgentFiatOrderStatusTool(server, api);
 
   return server;
 }
