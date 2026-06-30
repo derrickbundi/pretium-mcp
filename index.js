@@ -16,6 +16,11 @@ import {
   registerValidateBankAccountTool,
   registerValidatePhoneNumberTool
 } from "./tools/transactions.js";
+import {
+  registerCreateAgentTool,
+  registerCreateAgentSpendPolicyTool,
+  registerGetAgentTool
+} from "./tools/agent.js";
 
 const app = express();
 app.use(express.json());
@@ -37,6 +42,9 @@ function createServer() {
   registerOrderStatusTool(server, api);
   registerValidateBankAccountTool(server, api);
   registerValidatePhoneNumberTool(server, api);
+  registerCreateAgentTool(server, api);
+  registerCreateAgentSpendPolicyTool(server, api);
+  registerGetAgentTool(server, api);
 
   return server;
 }
