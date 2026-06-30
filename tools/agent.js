@@ -67,19 +67,6 @@ export function registerCreateAgentSpendPolicyTool(server, api) {
         };
       }
 
-      if (asset_type === "stablecoin" && (!asset_code || !chain)) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                error: "asset_code and chain are required when asset_type is 'stablecoin'",
-              }),
-            },
-          ],
-        };
-      }
-
       const { data } = await api.post(`/agent/spend-policy`, {
         agent_id,
         asset_type,
