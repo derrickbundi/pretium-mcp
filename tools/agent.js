@@ -102,9 +102,9 @@ export function registerGetAgentTool(server, api) {
   );
 }
 
-export function registerGetBalanceTool(server, api) {
+export function registerGetAgentBalanceTool(server, api) {
   server.tool(
-    "get_balance",
+    "get_agent_balance",
     "Get the current balance for an agent — either fiat payout balance or stablecoin settlement balance. Requires the agent_id returned from register_agent.",
     {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),

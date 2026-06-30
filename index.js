@@ -20,7 +20,7 @@ import {
   registerCreateAgentTool,
   registerCreateAgentSpendPolicyTool,
   registerGetAgentTool,
-  registerGetBalanceTool
+  registerGetAgentBalanceTool
 } from "./tools/agent.js";
 
 const app = express();
@@ -46,7 +46,7 @@ function createServer() {
   registerCreateAgentTool(server, api);
   registerCreateAgentSpendPolicyTool(server, api);
   registerGetAgentTool(server, api);
-  registerGetBalanceTool(server, api);
+  registerGetAgentBalanceTool(server, api);
 
   return server;
 }
