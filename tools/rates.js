@@ -9,6 +9,12 @@ export function registerRatesTool(server, api) {
         "The currency code to get rates for. ONLY NGN, KES or UGX are accepted. Reject any other currency."
       ),
     },
+    {
+      title: "Get Exchange Rates",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+    },
     async ({ currency_code }) => {
       const allowed = ["KES", "UGX", "NGN"];
 

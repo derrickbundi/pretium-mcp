@@ -7,6 +7,12 @@ export function registerCreateAgentTool(server, api) {
     {
       secret_key: z.string().describe("Secret key provisioned by Pretium."),
     },
+    {
+      title: "Register Agent",
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
+    },
     async ({ secret_key }) => {
       if (!secret_key) {
         return {
@@ -51,7 +57,12 @@ export function registerCreateAgentSpendPolicyTool(server, api) {
         .optional()
         .describe("Maximum total amount the agent can transact within a calendar month (optional)"),
     },
-
+    {
+      title: "Create Agent Spend Policy",
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
+    },
      async ({ agent_id, asset_type, currency_code, max_auto_approve_amount, daily_limit, monthly_limit}) => {
       if (!agent_id) {
         return {
@@ -88,6 +99,12 @@ export function registerGetAgentTool(server, api) {
     {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),
     },
+    {
+      title: "Get Agent",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
+    },
     async ({ agent_id }) => {
       if(!agent_id) {
         return {
@@ -123,6 +140,12 @@ export function registerGetAgentBalanceTool(server, api) {
         .string()
         .optional()
         .describe("Blockchain network, e.g. celo, base, bnb — required when asset_type is 'stablecoin'"),
+    },
+    {
+      title: "Get Agent Balance",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
     },
     async ({ agent_id, asset_type, currency_code, asset_code, network }) => {
       if (!agent_id) {
@@ -181,6 +204,12 @@ export function registerAgentCreateStablecoinOrderTool(server, api) {
         .string()
         .optional()
         .describe("Stablecoin asset code (defaults to USDT)"),
+    },
+    {
+      title: "Create Agent Stablecoin Order",
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
     },
     async ({ agent_id, address, network, amount, asset_code }) => {
       const asset = asset_code ?? "USDT";
@@ -251,6 +280,12 @@ export function registerAgentCreateFiatOrderTool(server, api) {
         .string()
         .optional()
         .describe("Payment narration for bank transfers"),
+    },
+    {
+      title: "Create Agent Fiat Order",
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
     },
     async ({
       agent_id,
@@ -365,6 +400,12 @@ export function registerAgentFiatOrderStatusTool(server, api) {
         .enum(["KES", "UGX", "NGN"])
         .optional()
         .describe("Currency code e.g. KES, UGX, NGN — optional but helps locate the payout record"),
+    },
+    {
+      title: "Get Agent Fiat Order Status",
+      readOnlyHint: true,
+      destructiveHint: false,
+      idempotentHint: true,
     },
     async ({ agent_id, reference, currency_code }) => {
       if (!agent_id) {
