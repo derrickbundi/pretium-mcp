@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { callApi, toolErr } from "./helpers.js";
 
 export function registerCreateOrderTool(server, api) {
   server.tool(
@@ -14,10 +15,8 @@ export function registerCreateOrderTool(server, api) {
       destructiveHint: false,
       idempotentHint: false,
     },
-    async ({ amount, currency_code }) => {
-      const { data } = await api.post(`/create-order`, { currency_code, amount, });
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
-    }
+    async ({ amount, currency_code }) =>
+      callApi(() => api.post(`/create-order`, { currency_code, amount }))
   );
 }
 
@@ -63,9 +62,9 @@ export function registerConfirmOrderTool(server, api) {
       idempotentHint: false,
     },
     async ({ type, internal_reference_id, network, hash, shortcode, mobile_network, bank_code, bank_name, account_number, account_name, narration }) => {
-      if (!internal_reference_id) throw new Error("internal_reference_id is required");
-      if (!network) throw new Error("network is required");
-      if (!hash) throw new Error("hash is required");
+      if (!internal_reference_id) return toolErr("internal_reference_id is required");
+      if (!network) return toolErr("network is required");
+      if (!hash) return toolErr("hash is required");
 
       const settlement = { internal_reference_id, network, hash };
       const basePayload = { type, ...settlement };
@@ -73,36 +72,35 @@ export function registerConfirmOrderTool(server, api) {
       let payload;
       switch (type) {
         case "mobile":
-          if (!shortcode) throw new Error("shortcode is required for type=mobile");
-          if (!mobile_network) throw new Error("mobile_network is required for type=mobile");
+          if (!shortcode) return toolErr("shortcode is required for type=mobile");
+          if (!mobile_network) return toolErr("mobile_network is required for type=mobile");
           payload = { ...basePayload, shortcode, mobile_network };
           break;
 
         case "paybill":
-          if (!shortcode) throw new Error("shortcode is required for type=paybill");
-          if (!account_number) throw new Error("account_number is required for type=paybill");
+          if (!shortcode) return toolErr("shortcode is required for type=paybill");
+          if (!account_number) return toolErr("account_number is required for type=paybill");
           payload = { ...basePayload, shortcode, ...(narration && { narration }) };
           break;
 
         case "buy_goods":
-          if (!shortcode) throw new Error("shortcode is required for type=buy_goods");
+          if (!shortcode) return toolErr("shortcode is required for type=buy_goods");
           payload = { ...basePayload, shortcode };
           break;
 
         case "bank_transfer":
-          if (!bank_code) throw new Error("bank_code is required for type=bank_transfer");
-          if (!bank_name) throw new Error("bank_name is required for type=bank_transfer");
-          if (!account_number) throw new Error("account_number is required for type=bank_transfer");
-          if (!account_name) throw new Error("account_name is required for type=bank_transfer");
-          payload = { ...basePayload, bank_code, $bank_name, account_number, account_name, ...(narration && { narration }) };
+          if (!bank_code) return toolErr("bank_code is required for type=bank_transfer");
+          if (!bank_name) return toolErr("bank_name is required for type=bank_transfer");
+          if (!account_number) return toolErr("account_number is required for type=bank_transfer");
+          if (!account_name) return toolErr("account_name is required for type=bank_transfer");
+          payload = { ...basePayload, bank_code, bank_name, account_number, account_name, ...(narration && { narration }) };
           break;
 
         default:
-          throw new Error(`Unsupported payment type: ${type}`);
+          return toolErr(`Unsupported payment type: ${type}`);
       }
 
-      const { data } = await api.post(`/confirm-order`, payload);
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.post(`/confirm-order`, payload));
     }
   );
 }
@@ -123,22 +121,14 @@ export function registerOrderStatusTool(server, api) {
     },
     async ({ hash, internal_reference_id }) => {
       if (!hash && !internal_reference_id) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({ error: "Either hash or internal_reference_id must be provided" }),
-            },
-          ],
-        };
+        return toolErr("Either hash or internal_reference_id must be provided");
       }
 
       const params = {};
       if (hash) params.hash = hash;
       if (internal_reference_id) params.internal_reference_id = internal_reference_id;
 
-      const { data } = await api.get(`/order-status`, { params });
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.get(`/order-status`, { params }));
     }
   );
 }
@@ -158,20 +148,18 @@ export function registerValidateBankAccountTool(server, api) {
       destructiveHint: false,
       idempotentHint: true,
     },
-    async({ bank_name, account_number, currency_code }) => {
+    async ({ bank_name, account_number, currency_code }) => {
       if (!bank_name || !account_number || !currency_code) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "bank_name, account_number, and currency_code are required" }) }],
-        };
+        return toolErr("bank_name, account_number, and currency_code are required");
       }
 
-      const { data } = await api.post(`/validate-bank-account`, {
-        bank_name,
-        account_number,
-        currency_code,
-      });
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() =>
+        api.post(`/validate-bank-account`, {
+          bank_name,
+          account_number,
+          currency_code,
+        })
+      );
     }
   );
 }
@@ -191,20 +179,18 @@ export function registerValidatePhoneNumberTool(server, api) {
       destructiveHint: false,
       idempotentHint: true,
     },
-    async({mobile_network, phone_number, currency_code }) => {
+    async ({ mobile_network, phone_number, currency_code }) => {
       if (!mobile_network || !phone_number || !currency_code) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "mobile_network, phone_number, and currency_code are required" }) }],
-        };
+        return toolErr("mobile_network, phone_number, and currency_code are required");
       }
 
-      const { data } = await api.post(`/validate-phone-number`, {
-        mobile_network,
-        phone_number,
-        currency_code,
-      });
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() =>
+        api.post(`/validate-phone-number`, {
+          mobile_network,
+          phone_number,
+          currency_code,
+        })
+      );
     }
   );
 }

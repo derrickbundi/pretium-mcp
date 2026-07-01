@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { callApi, toolErr } from "./helpers.js";
 
 export function registerCreateAgentTool(server, api) {
   server.tool(
@@ -14,17 +15,9 @@ export function registerCreateAgentTool(server, api) {
       idempotentHint: false,
     },
     async ({ secret_key }) => {
-      if (!secret_key) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "secret_key is required" }) }],
-        };
-      }
+      if (!secret_key) return toolErr("secret_key is required");
 
-      const { data } = await api.post(`/agent/create`, {
-        secret_key
-      });
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.post(`/agent/create`, { secret_key }));
     }
   );
 }
@@ -63,31 +56,23 @@ export function registerCreateAgentSpendPolicyTool(server, api) {
       destructiveHint: false,
       idempotentHint: false,
     },
-     async ({ agent_id, asset_type, currency_code, max_auto_approve_amount, daily_limit, monthly_limit}) => {
-      if (!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
+    async ({ agent_id, asset_type, currency_code, max_auto_approve_amount, daily_limit, monthly_limit }) => {
+      if (!agent_id) return toolErr("agent_id is required");
 
       if (asset_type === "fiat" && !currency_code) {
-        return {
-          content: [
-            { type: "text", text: JSON.stringify({ error: "currency_code is required when asset_type is 'fiat'" }) },
-          ],
-        };
+        return toolErr("currency_code is required when asset_type is 'fiat'");
       }
 
-      const { data } = await api.post(`/agent/spend-policy`, {
-        agent_id,
-        asset_type,
-        ...(asset_type === "fiat" ? { currency_code } : {}),
-        max_auto_approve_amount,
-        ...(daily_limit ? { daily_limit } : {}),
-        ...(monthly_limit ? { monthly_limit } : {}),
-      });
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() =>
+        api.post(`/agent/spend-policy`, {
+          agent_id,
+          asset_type,
+          ...(asset_type === "fiat" ? { currency_code } : {}),
+          max_auto_approve_amount,
+          ...(daily_limit ? { daily_limit } : {}),
+          ...(monthly_limit ? { monthly_limit } : {}),
+        })
+      );
     }
   );
 }
@@ -106,15 +91,9 @@ export function registerGetAgentTool(server, api) {
       idempotentHint: true,
     },
     async ({ agent_id }) => {
-      if(!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
+      if (!agent_id) return toolErr("agent_id is required");
 
-      const { data } = await api.get(`/agent/q/${agent_id}`);
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.get(`/agent/q/${agent_id}`));
     }
   );
 }
@@ -148,40 +127,26 @@ export function registerGetAgentBalanceTool(server, api) {
       idempotentHint: true,
     },
     async ({ agent_id, asset_type, currency_code, asset_code, network }) => {
-      if (!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
+      if (!agent_id) return toolErr("agent_id is required");
       if (asset_type === "fiat" && !currency_code) {
-        return {
-          content: [
-            { type: "text", text: JSON.stringify({ error: "currency_code is required when asset_type is 'fiat'" }) },
-          ],
-        };
+        return toolErr("currency_code is required when asset_type is 'fiat'");
       }
       if (asset_type === "stablecoin" && !asset_code) {
-        return {
-          content: [
-            { type: "text", text: JSON.stringify({ error: "asset_code is required when asset_type is 'stablecoin'" }) },
-          ],
-        };
+        return toolErr("asset_code is required when asset_type is 'stablecoin'");
       }
       if (asset_type === "stablecoin" && !network) {
-        return {
-          content: [
-            { type: "text", text: JSON.stringify({ error: "network is required when asset_type is 'stablecoin'" }) },
-          ],
-        };
+        return toolErr("network is required when asset_type is 'stablecoin'");
       }
-      const { data } = await api.get(`/agent/balance`, {
-        params: {
-          agent_id,
-          asset_type,
-          ...(asset_type === "fiat" ? { currency_code } : { asset_code, network }),
-        },
-      });
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+
+      return callApi(() =>
+        api.get(`/agent/balance`, {
+          params: {
+            agent_id,
+            asset_type,
+            ...(asset_type === "fiat" ? { currency_code } : { asset_code, network }),
+          },
+        })
+      );
     }
   );
 }
@@ -214,31 +179,19 @@ export function registerAgentCreateStablecoinOrderTool(server, api) {
     async ({ agent_id, address, network, amount, asset_code }) => {
       const asset = asset_code ?? "USDT";
 
-      if (!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
-      if (!address) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "address is required" }) }],
-        };
-      }
-      if (!network) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "network is required" }) }],
-        };
-      }
+      if (!agent_id) return toolErr("agent_id is required");
+      if (!address) return toolErr("address is required");
+      if (!network) return toolErr("network is required");
 
-      const { data } = await api.post(`/agent/create-stablecoin-order`, {
-        agent_id,
-        address,
-        amount,
-        asset_code: asset,
-        network,
-      });
-
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() =>
+        api.post(`/agent/create-stablecoin-order`, {
+          agent_id,
+          address,
+          amount,
+          asset_code: asset,
+          network,
+        })
+      );
     }
   );
 }
@@ -299,90 +252,43 @@ export function registerAgentCreateFiatOrderTool(server, api) {
       account_name,
       narration,
     }) => {
-      if (!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
-      if (!amount) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "amount is required" }) }],
-        };
-      }
-      if (!currency_code) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "currency_code is required" }) }],
-        };
-      }
+      if (!agent_id) return toolErr("agent_id is required");
+      if (!amount) return toolErr("amount is required");
+      if (!currency_code) return toolErr("currency_code is required");
 
       const basePayload = { agent_id, amount, currency_code, type };
       let payload;
 
       switch (type) {
         case "mobile":
-          if (!shortcode) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "shortcode is required for type=mobile" }) }],
-            };
-          }
-          if (!mobile_network) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "mobile_network is required for type=mobile" }) }],
-            };
-          }
+          if (!shortcode) return toolErr("shortcode is required for type=mobile");
+          if (!mobile_network) return toolErr("mobile_network is required for type=mobile");
           payload = { ...basePayload, shortcode, mobile_network };
           break;
 
         case "paybill":
-          if (!shortcode) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "shortcode is required for type=paybill" }) }],
-            };
-          }
-          if (!account_number) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "account_number is required for type=paybill" }) }],
-            };
-          }
+          if (!shortcode) return toolErr("shortcode is required for type=paybill");
+          if (!account_number) return toolErr("account_number is required for type=paybill");
           payload = { ...basePayload, shortcode, account_number, ...(narration && { narration }) };
           break;
 
         case "buy_goods":
-          if (!shortcode) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "shortcode is required for type=buy_goods" }) }],
-            };
-          }
+          if (!shortcode) return toolErr("shortcode is required for type=buy_goods");
           payload = { ...basePayload, shortcode };
           break;
 
         case "bank_transfer":
-          if (!bank_code) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "bank_code is required for type=bank_transfer" }) }],
-            };
-          }
-          if (!account_number) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "account_number is required for type=bank_transfer" }) }],
-            };
-          }
-          if (!account_name) {
-            return {
-              content: [{ type: "text", text: JSON.stringify({ error: "account_name is required for type=bank_transfer" }) }],
-            };
-          }
+          if (!bank_code) return toolErr("bank_code is required for type=bank_transfer");
+          if (!account_number) return toolErr("account_number is required for type=bank_transfer");
+          if (!account_name) return toolErr("account_name is required for type=bank_transfer");
           payload = { ...basePayload, bank_code, account_number, account_name, ...(narration && { narration }) };
           break;
 
         default:
-          return {
-            content: [{ type: "text", text: JSON.stringify({ error: `Unsupported payment type: ${type}` }) }],
-          };
+          return toolErr(`Unsupported payment type: ${type}`);
       }
 
-      const { data } = await api.post(`/agent/create-fiat-order`, payload);
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.post(`/agent/create-fiat-order`, payload));
     }
   );
 }
@@ -408,22 +314,13 @@ export function registerAgentFiatOrderStatusTool(server, api) {
       idempotentHint: true,
     },
     async ({ agent_id, reference, currency_code }) => {
-      if (!agent_id) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "agent_id is required" }) }],
-        };
-      }
-      if (!reference) {
-        return {
-          content: [{ type: "text", text: JSON.stringify({ error: "reference is required" }) }],
-        };
-      }
+      if (!agent_id) return toolErr("agent_id is required");
+      if (!reference) return toolErr("reference is required");
 
       const params = { agent_id, reference };
       if (currency_code) params.currency_code = currency_code;
 
-      const { data } = await api.get(`/agent/fiat-order-status`, { params });
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.get(`/agent/fiat-order-status`, { params }));
     }
   );
 }

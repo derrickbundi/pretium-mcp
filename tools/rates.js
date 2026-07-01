@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { callApi, toolErr } from "./helpers.js";
 
 export function registerRatesTool(server, api) {
   server.tool(
@@ -16,23 +17,13 @@ export function registerRatesTool(server, api) {
       idempotentHint: true,
     },
     async ({ currency_code }) => {
-      const allowed = ["KES", "UGX", "NGN"];
+      const code = currency_code.toUpperCase();
 
-      if (!allowed.includes(currency_code.toUpperCase())) {
-        return {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify({
-                error: `Currency ${currency_code} is not supported. Only NGN, KES and UGX are available.`,
-              }),
-            },
-          ],
-        };
+      if(!["KES", "UGX", "NGN"].includes(code)) {
+        return toolErr(`Currency ${currency_code} is not supported. Only NGN, KES and UGX are available.`);
       }
 
-      const { data } = await api.post("/rates", { currency_code: currency_code.toUpperCase() });
-      return { content: [{ type: "text", text: JSON.stringify(data) }] };
+      return callApi(() => api.post("/rates", { currency_code: code }));
     }
   );
 }
