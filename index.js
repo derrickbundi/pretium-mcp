@@ -22,6 +22,7 @@ import {
   registerGetAgentTool,
   registerGetAgentBalanceTool,
   registerAgentCreateStablecoinOrderTool,
+  registerAgentCreateFiatOrderTool,
   registerAgentFiatOrderStatusTool
 } from "./tools/agent.js";
 
@@ -50,6 +51,7 @@ function createServer() {
   registerGetAgentTool(server, api);
   registerGetAgentBalanceTool(server, api);
   registerAgentCreateStablecoinOrderTool(server, api);
+  registerAgentCreateFiatOrderTool(server, api);
   registerAgentFiatOrderStatusTool(server, api);
 
   return server;
