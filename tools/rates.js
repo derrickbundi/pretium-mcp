@@ -24,7 +24,7 @@ export function registerRatesTool(server, api) {
             {
               type: "text",
               text: JSON.stringify({
-                error: `Currency ${currency_code} is not supported. Only NGG, KES and UGX are available.`,
+                error: `Currency ${currency_code} is not supported. Only NGN, KES and UGX are available.`,
               }),
             },
           ],

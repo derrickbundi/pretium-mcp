@@ -18,9 +18,21 @@ Supported currencies: **KES** (Kenya), **UGX** (Uganda), **NGN** (Nigeria).
 
 ### Prerequisites
 
-- Node.js
-- Pretium partner account with API key
+- Node.js 18+
+- [Pretium partner account](#partner-onboarding) with API key
 - Access to the Pretium payment API
+
+### Partner onboarding
+
+`pretium-mcp` requires a Pretium **partner API key**. Tools will not work without one.
+
+1. **Apply or sign up** — [pretium.africa](https://pretium.africa)
+2. **Complete partner setup** in the Pretium partner portal (wallet, currencies, compliance)
+3. **Copy your API key** from the partner dashboard (sent as `x-api-key` to the payment API)
+4. **Optional — agents:** request an agent `secret_key` from Pretium to use `register_agent`
+5. **Documentation** — [docs.pretium.africa](https://docs.pretium.africa)
+
+For integration help: [hello@pretium.africa](mailto:hello@pretium.africa)
 
 ### Install
 
@@ -29,18 +41,6 @@ git clone <repo-url>
 cd pretium-mcp
 npm install
 ```
-
-### Configure
-
-Create a `.env` file in the project root:
-
-```env
-PRETIUM_API_BASE_URL=https://mcp.pretium.africa
-PRETIUM_API_KEY=your_partner_api_key
-PORT=3000
-```
-
-`PRETIUM_API_BASE_URL` is the Pretium **payment API** base (used by tools internally). MCP clients connect to **this server** on `PORT`, not to that URL directly.
 
 ### Run
 
@@ -144,9 +144,17 @@ pretium-mcp/
 │   ├── transactions.js # Orders, validation, status
 │   └── agent.js       # Agent lifecycle and payouts
 ├── skills.md          # Agent capabilities & workflow guide
+├── README.md
+├── SECURITY.md        # Vulnerability reporting & self-host guidance
 ├── package.json
 └── .env               # Local config (not committed)
 ```
+
+## Security
+
+See **[SECURITY.md](./SECURITY.md)** for vulnerability reporting (GitHub issues) and self-hosting guidance.
+
+Do not expose this server publicly without authentication — it uses your partner API key for all tool calls.
 
 ## API
 

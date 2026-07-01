@@ -43,6 +43,9 @@ export function registerConfirmOrderTool(server, api) {
       bank_code: z.string()
         .optional()
         .describe("Bank code or swift code. Required for type=bank_transfer"),
+      bank_name: z.string()
+        .optional()
+        .describe("Bank name. Required for type=bank_transfer"),
       account_number: z.string()
         .optional()
         .describe("Destination bank account number. Required for type=bank_transfer"),
@@ -59,7 +62,7 @@ export function registerConfirmOrderTool(server, api) {
       destructiveHint: false,
       idempotentHint: false,
     },
-    async ({ type, internal_reference_id, network, hash, shortcode, mobile_network, bank_code, account_number, account_name, narration }) => {
+    async ({ type, internal_reference_id, network, hash, shortcode, mobile_network, bank_code, bank_name, account_number, account_name, narration }) => {
       if (!internal_reference_id) throw new Error("internal_reference_id is required");
       if (!network) throw new Error("network is required");
       if (!hash) throw new Error("hash is required");
@@ -88,7 +91,7 @@ export function registerConfirmOrderTool(server, api) {
 
         case "bank_transfer":
           if (!bank_code) throw new Error("bank_code is required for type=bank_transfer");
-          if (!bank_name) throw new Error("bank_code is required for type=bank_transfer");
+          if (!bank_name) throw new Error("bank_name is required for type=bank_transfer");
           if (!account_number) throw new Error("account_number is required for type=bank_transfer");
           if (!account_name) throw new Error("account_name is required for type=bank_transfer");
           payload = { ...basePayload, bank_code, $bank_name, account_number, account_name, ...(narration && { narration }) };

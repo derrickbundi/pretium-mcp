@@ -1,21 +1,24 @@
 {
   "name": "pretium-mcp",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pretium MCP server for fiat & stablecoin payments.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["mcp", "pretium", "payments", "kes", "ugx", "ngn"],
+  "repository": "github:derrickbundi/pretium-mcp",
+  "author": "Derrick Bundi",
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "axios": "^1.18.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
