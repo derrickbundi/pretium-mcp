@@ -37,7 +37,7 @@ export function registerCreateAgentSpendPolicyTool(server, api) {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),
       asset_type: z
         .enum(["fiat", "stablecoin"])
-        .describe("Whether this policy governs fiat payouts or stablecoin settlement"),
+        .describe("Whether this policy governs fiat payouts or stablecoin settlement transactions"),
       currency_code: z
         .string()
         .optional()
