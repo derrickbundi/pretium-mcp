@@ -19,7 +19,7 @@ Each partner registers **one agent**, identified by `agent_id` (format: `AG_XXXX
 
 ---
 
-## Capabilities at a Glance
+## Overall Capabilities at a Glance
 
 | Area | What the agent can do |
 |---|---|
