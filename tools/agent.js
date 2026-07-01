@@ -201,7 +201,7 @@ export function registerAgentCreateStablecoinOrderTool(server, api) {
         };
       }
 
-      const { data } = await api.post(`/agent/pay`, {
+      const { data } = await api.post(`/agent/create-stablecoin-order`, {
         agent_id,
         address,
         amount,
