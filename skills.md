@@ -2,7 +2,9 @@
 
 Guide for AI agents using the Pretium MCP server: what agents can do, which tools exist, and how to chain them.
 
-Pretium supports fiat payouts in **KES**, **UGX**, and **NGN** via mobile money, paybill, buy goods, and bank transfer — funded either from an agent's pre-loaded balance or by settling with stablecoin on-chain.
+[Pretium](https://pretium.africa) connects stablecoin infrastructure to **7+ African markets** — M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers across Kenya (KES), Uganda (UGX), Nigeria (NGN), Ghana (GHS), Zambia (ZMW), Malawi (MWK), DR Congo (CDF), and more.
+
+**MCP agent fiat payouts** support **KES**, **UGX**, and **NGN** via mobile money, paybill, buy goods, and bank transfer — funded from an agent's pre-loaded balance or by settling with stablecoin on-chain.
 
 ---
 

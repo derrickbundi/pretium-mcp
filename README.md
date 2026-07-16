@@ -1,18 +1,54 @@
 # Pretium MCP
 
-Model Context Protocol (MCP) server for [Pretium](https://pretium.africa) — lets AI agents send fiat payouts, manage payment agents, and settle off-ramp orders across **KES**, **UGX**, and **NGN**.
+Model Context Protocol (MCP) server for [Pretium](https://pretium.africa) — pay with stablecoins and let AI agents send fiat across **7+ African markets** via M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers.
 
 ## Overview
 
 `pretium-mcp` exposes Pretium's payment API as MCP tools. Agents can:
 
 - Register and configure **Pretium agents** with spend policies
-- Send **fiat payouts** (mobile money, paybill, buy goods, bank transfer)
+- Send **fiat payouts** via M-Pesa, MTN, Airtel Money, paybill, buy goods, and bank transfer
 - Transfer **USDT/USDC** on Celo, Base, or BNB
 - Run **off-ramp orders** (stablecoin settlement → fiat disbursement)
 - Validate recipients, check balances, poll payout status, and fetch FX rates
 
-Supported currencies: **KES** (Kenya), **UGX** (Uganda), **NGN** (Nigeria).
+### Payment rails
+
+| Rail | Markets |
+|------|---------|
+| M-Pesa | Kenya (paybill, till, mobile money) |
+| MTN Mobile Money | Uganda, Ghana, and more |
+| Airtel Money / AirtelTigo | Kenya, Uganda, Malawi, and more |
+| Bank transfers | Nigeria, Kenya, Uganda, and more |
+| Stablecoins | USDT/USDC on Celo, Base, BNB |
+
+### Markets (7+)
+
+Pretium operates across **7+ African markets**, including Kenya (KES), Uganda (UGX), Nigeria (NGN), Ghana (GHS), Zambia (ZMW), Malawi (MWK), DR Congo (CDF), and more.
+
+**MCP agent fiat tools** currently support **KES**, **UGX**, and **NGN**. Other corridors are available via the [Pretium Payment API](https://docs.pretium.africa) and [pretium.africa](https://pretium.africa) consumer app.
+
+## Cursor Directory
+
+Published for discovery on [cursor.directory](https://cursor.directory). To install in Cursor:
+
+1. Clone this repo and configure `.env` (see [Quick start](#quick-start))
+2. Run `npm run dev`
+3. Add to `~/.cursor/mcp.json` or `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "pretium-mcp": {
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
+```
+
+4. Restart Cursor — 13 tools should appear under **pretium-mcp**
+
+Or submit `https://github.com/derrickbundi/pretium-mcp` at [cursor.directory/plugins/new](https://cursor.directory/plugins/new) for one-click discovery.
 
 ## Quick start
 
@@ -138,16 +174,23 @@ create_order → on-chain payment → confirm_order → get_order_status
 
 ```
 pretium-mcp/
-├── index.js           # Express + MCP server entrypoint
+├── index.js                  # Express + MCP server entrypoint
+├── mcp.json                  # Cursor MCP config (auto-detected by cursor.directory)
+├── .mcp.json                 # Alternate path scanned by cursor.directory
+├── .cursor-plugin/
+│   └── plugin.json           # Cursor plugin manifest
 ├── tools/
-│   ├── rates.js       # FX rate tools
-│   ├── transactions.js # Orders, validation, status
-│   └── agent.js       # Agent lifecycle and payouts
-├── skills.md          # Agent capabilities & workflow guide
+│   ├── rates.js              # FX rate tools
+│   ├── transactions.js       # Orders, validation, status
+│   └── agent.js              # Agent lifecycle and payouts
+├── skills/
+│   └── pretium-payments/
+│       └── SKILL.md          # Agent skill (auto-detected by cursor.directory)
+├── skills.md                 # Full agent capabilities guide
 ├── README.md
-├── SECURITY.md        # Vulnerability reporting & self-host guidance
+├── SECURITY.md
 ├── package.json
-└── .env               # Local config (not committed)
+└── .env                      # Local config (not committed)
 ```
 
 ## Security

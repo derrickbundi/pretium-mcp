@@ -1,13 +1,13 @@
 {
   "name": "pretium-mcp",
   "version": "1.0.0",
-  "description": "Pretium MCP server for fiat & stablecoin payments.",
+  "description": "Pay with stablecoins and let AI agents send money across 7+ African markets via pretium.africa — M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers.",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon index.js"
   },
-  "keywords": ["mcp", "pretium", "payments", "kes", "ugx", "ngn"],
+  "keywords": ["mcp", "pretium", "stablecoins", "pay-with-stablecoins", "ai-agents", "payments", "m-pesa", "mtn", "airtel-money", "bank-transfers", "africa", "kes", "ugx", "ngn", "ghs", "zmw", "mwk"],
   "repository": "github:derrickbundi/pretium-mcp",
   "author": "Derrick Bundi",
   "license": "ISC",
