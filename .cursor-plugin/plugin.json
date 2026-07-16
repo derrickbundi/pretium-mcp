@@ -1,0 +1,28 @@
+{
+  "name": "pretium-mcp",
+  "version": "1.0.0",
+  "description": "Pay with stablecoins and let AI agents send money across Africa. MCP server for pretium.africa — fiat payouts (M-Pesa, mobile money, paybills, banks) and USDT/USDC settlement in KES, UGX, NGN.",
+  "author": {
+    "name": "Pretium",
+    "email": "hello@pretium.africa",
+    "url": "https://pretium.africa"
+  },
+  "homepage": "https://pretium.africa",
+  "repository": "https://github.com/derrickbundi/pretium-mcp",
+  "license": "ISC",
+  "keywords": [
+    "mcp",
+    "pretium",
+    "stablecoins",
+    "pay-with-stablecoins",
+    "ai-agents",
+    "agentic-payments",
+    "payments",
+    "m-pesa",
+    "kes",
+    "ugx",
+    "ngn",
+    "usdt",
+    "usdc"
+  ]
+}

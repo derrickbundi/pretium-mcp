@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "pretium-mcp": {
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
