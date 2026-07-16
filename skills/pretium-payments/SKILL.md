@@ -1,6 +1,6 @@
 ---
 name: pretium-payments
-description: Pay with stablecoins and send fiat across Africa using pretium.africa MCP tools — register agents, set spend policies, and execute M-Pesa, mobile money, paybill, and bank payouts in KES, UGX, NGN.
+description: Pay with stablecoins and send fiat across 7+ African markets using pretium.africa MCP tools — M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers with programmable AI agent spend policies.
 ---
 
 # Pretium Payments
@@ -35,11 +35,30 @@ create_order → on-chain payment → confirm_order → get_order_status
 | Transactions | `create_order`, `confirm_order`, `get_order_status`, `validate_bank_account`, `validate_phone_number` |
 | Agent | `register_agent`, `create_agent_spend_policy`, `get_agent`, `get_agent_balance`, `agent_create_fiat_order`, `get_agent_fiat_order_status`, `agent_create_stablecoin_order` |
 
-## Supported markets
+## Payment rails
 
-- **KES** — Kenya (M-Pesa, paybill, till, bank)
-- **UGX** — Uganda (mobile money, bank)
-- **NGN** — Nigeria (bank transfer)
+- **M-Pesa** — mobile money, paybills, and till numbers (Kenya)
+- **MTN Mobile Money** — Uganda, Ghana, and other corridors
+- **Airtel Money / AirtelTigo** — mobile money payouts
+- **Bank transfers** — NGN, KES, UGX, and other supported markets
+- **Stablecoins** — USDT/USDC on Celo, Base, and BNB
+
+## Supported markets (7+)
+
+Pretium operates across **7+ African markets**, including:
+
+| Market | Currency | Rails |
+|--------|----------|-------|
+| Kenya | KES | M-Pesa, Airtel Money, paybill, till, bank |
+| Uganda | UGX | MTN, Airtel Money, bank |
+| Nigeria | NGN | Bank transfer |
+| Ghana | GHS | MTN, AirtelTigo |
+| Zambia | ZMW | Mobile money, bank |
+| Malawi | MWK | Airtel Money |
+| DR Congo | CDF | Mobile money |
+| + more | — | Expanding corridors |
+
+> **MCP agent fiat payouts** currently support **KES**, **UGX**, and **NGN** via agent tools. Other markets are available through the Pretium Payment API and consumer app at [pretium.africa](https://pretium.africa).
 
 ## Links
 

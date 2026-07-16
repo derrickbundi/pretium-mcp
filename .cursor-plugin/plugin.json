@@ -1,7 +1,7 @@
 {
   "name": "pretium-mcp",
   "version": "1.0.0",
-  "description": "Pay with stablecoins and let AI agents send money across Africa. MCP server for pretium.africa — fiat payouts (M-Pesa, mobile money, paybills, banks) and USDT/USDC settlement in KES, UGX, NGN.",
+  "description": "Pay with stablecoins and let AI agents send money across 7+ African markets via pretium.africa — M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers with USDT/USDC settlement.",
   "author": {
     "name": "Pretium",
     "email": "hello@pretium.africa",
@@ -19,9 +19,17 @@
     "agentic-payments",
     "payments",
     "m-pesa",
+    "mtn",
+    "airtel-money",
+    "bank-transfers",
+    "mobile-money",
+    "africa",
     "kes",
     "ugx",
     "ngn",
+    "ghs",
+    "zmw",
+    "mwk",
     "usdt",
     "usdc"
   ]
