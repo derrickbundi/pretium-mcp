@@ -98,6 +98,7 @@ app.get("/mcp", async (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders();
+  res.write(": ping\n\n");
 
   const keepAlive = setInterval(() => {
     res.write(": ping\n\n");
