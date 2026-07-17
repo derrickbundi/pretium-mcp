@@ -94,6 +94,11 @@ app.post("/mcp", async (req, res) => {
 });
 
 app.get("/mcp", async (req, res) => {
+  const accept = req.headers.accept || "";
+  if (!accept.includes("text/event-stream")) {
+    return res.status(200).json({ status: "ok", server: "pretium-mcp" });
+  }
+
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
