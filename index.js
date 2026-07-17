@@ -25,6 +25,7 @@ import {
   registerAgentCreateFiatOrderTool,
   registerAgentFiatOrderStatusTool
 } from "./tools/agent.js";
+import { getAgentCard } from "./agent-card.js";
 
 const app = express();
 app.use(express.json());
@@ -58,6 +59,17 @@ function createServer() {
 }
 
 const transports = {};
+
+function publicBaseUrl(req) {
+  return (
+    process.env.PUBLIC_BASE_URL ||
+    `${req.protocol}://${req.get("host")}`
+  );
+}
+
+app.get("/.well-known/agent-card.json", (req, res) => {
+  res.json(getAgentCard(publicBaseUrl(req)));
+});
 
 app.get("/sse", async (req, res) => {
   const server = createServer();
