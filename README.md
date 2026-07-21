@@ -170,11 +170,30 @@ register_agent → create_agent_spend_policy → agent_create_fiat_order → get
 create_order → on-chain payment → confirm_order → get_order_status
 ```
 
+## Discovery (MCP, A2A, OASF, ERC-8004)
+
+This server exposes three machine-readable discovery endpoints:
+
+| Protocol | URL | Purpose |
+|----------|-----|---------|
+| **MCP** | `POST /mcp` | 13 callable payment tools |
+| **A2A** | `GET /.well-known/agent-card.json` | Agent card with 8 skills |
+| **OASF** | `GET /.well-known/oasf-record.json` | [Open Agentic Schema Framework](https://github.com/agntcy/oasf) record |
+
+Static copy for GitHub indexing: [`oasf-record.json`](./oasf-record.json)
+
+```bash
+curl -sS https://mcp.pretium.africa/.well-known/oasf-record.json | python3 -m json.tool | head -30
+```
+
 ## Project structure
 
 ```
 pretium-mcp/
 ├── index.js                  # Express + MCP server entrypoint
+├── agent-card.js             # A2A agent card (/.well-known/agent-card.json)
+├── oasf-record.js            # OASF record builder (/.well-known/oasf-record.json)
+├── oasf-record.json          # Static OASF record for GitHub discovery
 ├── mcp.json                  # Cursor MCP config (auto-detected by cursor.directory)
 ├── .mcp.json                 # Alternate path scanned by cursor.directory
 ├── .cursor-plugin/

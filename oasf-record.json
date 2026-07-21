@@ -1,0 +1,119 @@
+{
+  "name": "Pretium MCP",
+  "description": "MCP server for Pretium — pay with stablecoins and send fiat across 7+ African markets via M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers. Exposes 13 MCP tools for agent registration, spend policies, fiat payouts, stablecoin transfers, off-ramp orders, FX rates, and recipient validation.",
+  "version": "1.0.0",
+  "schema_version": "1.0.0",
+  "authors": [
+    "Pretium <hello@pretium.africa>"
+  ],
+  "created_at": "2025-07-17T00:00:00.000Z",
+  "annotations": {
+    "oasf.taxonomy_version": "0.8.0",
+    "mcp_endpoint": "https://mcp.pretium.africa/mcp",
+    "a2a_agent_card": "https://mcp.pretium.africa/.well-known/agent-card.json",
+    "website": "https://pretium.africa",
+    "documentation": "https://docs.pretium.africa",
+    "erc8004_agent": "https://8004scan.io/agents/celo/9199"
+  },
+  "skills": [
+    {
+      "name": "tool_interaction/automation/workflow_automation",
+      "id": 1402
+    },
+    {
+      "name": "tool_interaction/api_schema_understanding",
+      "id": 1401
+    },
+    {
+      "name": "natural_language_processing/information_retrieval_and_synthesis/question_answering",
+      "id": 10302
+    },
+    {
+      "name": "natural_language_processing/conversation/chatbot",
+      "id": 10204
+    },
+    {
+      "name": "technology/blockchain/cryptocurrency",
+      "id": 10901
+    }
+  ],
+  "domains": [
+    {
+      "name": "technology/blockchain",
+      "id": 109
+    },
+    {
+      "name": "technology/blockchain/cryptocurrency",
+      "id": 10901
+    },
+    {
+      "name": "technology/blockchain/smart_contracts",
+      "id": 10903
+    },
+    {
+      "name": "finance_and_business/finance",
+      "id": 202
+    },
+    {
+      "name": "finance_and_business/banking",
+      "id": 201
+    },
+    {
+      "name": "technology/telecommunications",
+      "id": 1601
+    }
+  ],
+  "locators": [
+    {
+      "type": "source_code",
+      "urls": [
+        "https://github.com/derrickbundi/pretium-mcp",
+        "https://github.com/derrickbundi/pretium-mcp/blob/master/oasf-record.json"
+      ]
+    },
+    {
+      "type": "documentation",
+      "urls": [
+        "https://docs.pretium.africa",
+        "https://github.com/derrickbundi/pretium-mcp/blob/master/README.md"
+      ]
+    },
+    {
+      "type": "service",
+      "urls": [
+        "https://mcp.pretium.africa/mcp",
+        "https://mcp.pretium.africa/.well-known/agent-card.json"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "name": "mcp",
+      "data": {
+        "transport": "streamable-http",
+        "endpoint": "https://mcp.pretium.africa/mcp",
+        "tools": [
+          "get_exchange_rates",
+          "create_order",
+          "confirm_order",
+          "get_order_status",
+          "validate_bank_account",
+          "validate_phone_number",
+          "register_agent",
+          "create_agent_spend_policy",
+          "get_agent",
+          "get_agent_balance",
+          "agent_create_stablecoin_order",
+          "agent_create_fiat_order",
+          "get_agent_fiat_order_status"
+        ]
+      }
+    },
+    {
+      "name": "a2a",
+      "data": {
+        "agent_card": "https://mcp.pretium.africa/.well-known/agent-card.json"
+      }
+    }
+  ]
+}

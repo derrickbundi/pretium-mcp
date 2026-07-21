@@ -26,6 +26,7 @@ import {
   registerAgentFiatOrderStatusTool
 } from "./tools/agent.js";
 import { getAgentCard } from "./agent-card.js";
+import { getOasfRecord } from "./oasf-record.js";
 
 const app = express();
 app.use(express.json());
@@ -69,6 +70,15 @@ function publicBaseUrl(req) {
 
 app.get("/.well-known/agent-card.json", (req, res) => {
   res.json(getAgentCard(publicBaseUrl(req)));
+});
+
+app.get("/.well-known/oasf-record.json", (req, res) => {
+  res.json(
+    getOasfRecord({
+      baseUrl: publicBaseUrl(req),
+      repoUrl: process.env.GITHUB_REPO_URL,
+    })
+  );
 });
 
 app.get("/sse", async (req, res) => {
