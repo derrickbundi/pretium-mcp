@@ -29,8 +29,11 @@ export function registerConfirmOrderTool(server, api) {
         .describe("Payment type to determine which fields are required"),
       internal_reference_id: z.string()
         .describe("Internal reference ID returned when the order was created"),
-      network: z.string()
-        .describe("Blockchain network e.g. celo, base, bnb, solana"),
+      network: z
+        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana"])
+        .describe(
+          "Blockchain network e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana"
+        ),
       hash: z.string()
         .describe("Transaction hash from the blockchain"),
       shortcode: z.string()

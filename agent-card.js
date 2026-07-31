@@ -4,7 +4,7 @@ export function getAgentCard(baseUrl) {
   return {
     name: "Pretium",
     description:
-      "Pay with stablecoins and send fiat across 7+ African markets via M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers. Supports programmable AI agent spend policies, off-ramp orders, and USDT/USDC transfers on Celo, Base, and BNB.",
+      "Pay with stablecoins and send fiat across 7+ African markets via M-Pesa, MTN, Airtel Money, paybills, till numbers, and bank transfers. Supports programmable AI agent spend policies, off-ramp orders, and USDT/USDC transfers on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, and Solana.",
     version: "1.0.0",
     url: `${origin}/mcp`,
     provider: {
@@ -38,11 +38,25 @@ export function getAgentCard(baseUrl) {
         id: "agent-stablecoin-transfer",
         name: "Agent Stablecoin Transfer",
         description:
-          "Transfer USDT or USDC from an agent balance to a wallet on Celo, Base, or BNB.",
-        tags: ["stablecoin", "usdt", "usdc", "celo", "blockchain", "crypto"],
+          "Transfer USDT or USDC from an agent balance to a wallet on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, or Solana.",
+        tags: [
+          "stablecoin",
+          "usdt",
+          "usdc",
+          "celo",
+          "base",
+          "bnb",
+          "polygon",
+          "arbitrum",
+          "avalanche",
+          "solana",
+          "blockchain",
+          "crypto",
+        ],
         examples: [
           "Send 10 USDT on Celo to a wallet address",
           "Transfer USDC on Base from my agent balance",
+          "Send USDT on Solana to a wallet address",
         ],
         inputModes: ["application/json", "text/plain"],
         outputModes: ["application/json"],

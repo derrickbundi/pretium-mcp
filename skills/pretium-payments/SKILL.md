@@ -41,7 +41,7 @@ create_order → on-chain payment → confirm_order → get_order_status
 - **MTN Mobile Money** — Uganda, Ghana, and other corridors
 - **Airtel Money / AirtelTigo** — mobile money payouts
 - **Bank transfers** — NGN, KES, UGX, and other supported markets
-- **Stablecoins** — USDT/USDC on Celo, Base, and BNB
+- **Stablecoins** — USDT/USDC on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, and Solana
 
 ## Supported markets (7+)
 

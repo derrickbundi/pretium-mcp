@@ -116,9 +116,11 @@ export function registerGetAgentBalanceTool(server, api) {
         .optional()
         .describe("Stablecoin asset code, e.g. USDT, USDC — required when asset_type is 'stablecoin'"),
       network: z
-        .string()
+        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana"])
         .optional()
-        .describe("Blockchain network, e.g. celo, base, bnb — required when asset_type is 'stablecoin'"),
+        .describe(
+          "Blockchain network, e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana — required when asset_type is 'stablecoin'"
+        ),
     },
     {
       title: "Get Agent Balance",
@@ -159,8 +161,10 @@ export function registerAgentCreateStablecoinOrderTool(server, api) {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),
       address: z.string().describe("Destination wallet address to receive USDT or USDC"),
       network: z
-        .enum(["celo", "base", "bnb"])
-        .describe("Blockchain network to send on, e.g. celo, base, bnb"),
+        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana"])
+        .describe(
+          "Blockchain network to send on, e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana"
+        ),
       amount: z
         .number()
         .positive()

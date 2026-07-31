@@ -8,7 +8,7 @@ Model Context Protocol (MCP) server for [Pretium](https://pretium.africa) — pa
 
 - Register and configure **Pretium agents** with spend policies
 - Send **fiat payouts** via M-Pesa, MTN, Airtel Money, paybill, buy goods, and bank transfer
-- Transfer **USDT/USDC** on Celo, Base, or BNB
+- Transfer **USDT/USDC** on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, or Solana
 - Run **off-ramp orders** (stablecoin settlement → fiat disbursement)
 - Validate recipients, check balances, poll payout status, and fetch FX rates
 
@@ -20,7 +20,7 @@ Model Context Protocol (MCP) server for [Pretium](https://pretium.africa) — pa
 | MTN Mobile Money | Uganda, Ghana, and more |
 | Airtel Money / AirtelTigo | Kenya, Uganda, Malawi, and more |
 | Bank transfers | Nigeria, Kenya, Uganda, and more |
-| Stablecoins | USDT/USDC on Celo, Base, BNB |
+| Stablecoins | USDT/USDC on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, Solana |
 
 ### Markets (7+)
 
