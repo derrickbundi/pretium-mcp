@@ -63,7 +63,7 @@ Each partner registers **one agent**, identified by `agent_id` (format: `AG_XXXX
 
 | Tool | Description |
 |---|---|
-| `register_agent` | Register with `secret_key`; returns `agent_id` |
+| `register_agent` | Register with `secret_key` + optional `category` (`ERC-20`, `SOLANA`, `STELLAR`); returns `agent_id` |
 | `create_agent_spend_policy` | Set fiat or stablecoin spend limits |
 | `get_agent` | Agent details and active spend policies |
 
@@ -83,7 +83,7 @@ Each partner registers **one agent**, identified by `agent_id` (format: `AG_XXXX
 ### Register and configure
 
 ```
-register_agent(secret_key)           → agent_id
+register_agent(secret_key, category?) → agent_id
 create_agent_spend_policy(...)       → per currency / asset type
 get_agent(agent_id)                  → confirm policies
 ```

@@ -4,9 +4,13 @@ import { callApi, toolErr } from "./helpers.js";
 export function registerCreateAgentTool(server, api) {
   server.tool(
     "register_agent",
-    "Register an agent with Pretium using a secret key provisioned by Pretium. All agent details (payout method, currency, contact info, etc.) are already configured server-side at the time the secret key was provisioned — this tool simply activates/registers that agent.",
+    "Register an agent with Pretium using a secret key provisioned by Pretium. Pass category to choose the wallet type: ERC-20 (default, EVM chains), SOLANA, or STELLAR. One agent can be registered per category.",
     {
       secret_key: z.string().describe("Secret key provisioned by Pretium."),
+      category: z
+        .enum(["ERC-20", "SOLANA", "STELLAR"])
+        .optional()
+        .describe("Wallet category for the agent. ERC-20 (default) for EVM chains, SOLANA, or STELLAR. One agent per category."),
     },
     {
       title: "Register Agent",
@@ -14,10 +18,15 @@ export function registerCreateAgentTool(server, api) {
       destructiveHint: false,
       idempotentHint: false,
     },
-    async ({ secret_key }) => {
+    async ({ secret_key, category }) => {
       if (!secret_key) return toolErr("secret_key is required");
 
-      return callApi(() => api.post(`/agent/create`, { secret_key }));
+      return callApi(() =>
+        api.post(`/agent/create`, {
+          secret_key,
+          ...(category ? { category } : {}),
+        })
+      );
     }
   );
 }
