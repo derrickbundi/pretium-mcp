@@ -13,7 +13,7 @@ Guide for AI agents using the Pretium MCP server: what agents can do, which tool
 A Pretium agent is a payment identity tied to a partner account. After registration it can:
 
 - Spend **fiat balance** from the partner wallet (per currency)
-- Spend **stablecoin balance** on-chain (USDT/USDC on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, or Solana)
+- Spend **stablecoin balance** on-chain (USDT/USDC on Celo, Base, BNB, Polygon, Arbitrum, Avalanche, Solana, or Stellar)
 - Execute payouts within **spend policy** limits without manual approval
 - Query balances and track payout status
 
@@ -162,6 +162,7 @@ agent_create_stablecoin_order(agent_id, address, amount, network, asset_code?)
 | Arbitrum | USDT, USDC |
 | Avalanche | USDT, USDC |
 | Solana | USDT, USDC |
+| Stellar | USDC |
 
 Returns `transaction_hash` on success.
 

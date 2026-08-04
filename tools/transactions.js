@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { callApi, toolErr } from "./helpers.js";
+import { callApi, toolErr, BLOCKCHAIN_NETWORKS, BLOCKCHAIN_NETWORKS_DESC } from "./helpers.js";
 
 export function registerCreateOrderTool(server, api) {
   server.tool(
@@ -30,10 +30,8 @@ export function registerConfirmOrderTool(server, api) {
       internal_reference_id: z.string()
         .describe("Internal reference ID returned when the order was created"),
       network: z
-        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana"])
-        .describe(
-          "Blockchain network e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana"
-        ),
+        .enum(BLOCKCHAIN_NETWORKS)
+        .describe(BLOCKCHAIN_NETWORKS_DESC),
       hash: z.string()
         .describe("Transaction hash from the blockchain"),
       shortcode: z.string()

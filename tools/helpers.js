@@ -1,3 +1,17 @@
+export const BLOCKCHAIN_NETWORKS = [
+  "celo",
+  "base",
+  "bnb",
+  "polygon",
+  "arbitrum",
+  "avalanche",
+  "solana",
+  "stellar",
+];
+
+export const BLOCKCHAIN_NETWORKS_DESC =
+  "Blockchain network e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana, stellar";
+
 export const toolOk = (data) => ({
   content: [{ type: "text", text: JSON.stringify(data) }],
 });
