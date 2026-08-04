@@ -119,11 +119,12 @@ export function getAgentCard(baseUrl) {
         id: "balance-check",
         name: "Balance Check",
         description:
-          "Check an agent's fiat wallet balance or on-chain stablecoin balance.",
-        tags: ["balance", "wallet", "agent", "stablecoin", "fiat"],
+          "Check an agent's fiat wallet balance, on-chain stablecoin balance, or native token balance.",
+        tags: ["balance", "wallet", "agent", "stablecoin", "native", "fiat"],
         examples: [
           "What is my agent UGX balance?",
           "Check USDT balance for my agent on Celo",
+          "What is my agent CELO balance?",
         ],
         inputModes: ["application/json", "text/plain"],
         outputModes: ["application/json"],

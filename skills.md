@@ -29,7 +29,7 @@ Each partner registers **one agent**, identified by `agent_id` (format: `AG_XXXX
 | Policies | Set per-tx, daily, and monthly spend limits |
 | Fiat payouts | Send KES/UGX/NGN to mobile, paybill, till, or bank |
 | Stablecoin | Send USDT/USDC to any wallet address |
-| Balances | Check fiat wallet or on-chain stablecoin balance |
+| Balances | Check fiat, stablecoin, or native token balance |
 | Status | Poll fiat payout progress by `reference` |
 | Validation | Verify phone numbers and bank accounts before paying |
 | FX | Get buying/selling rates for KES, UGX, NGN vs USD |
@@ -71,7 +71,7 @@ Each partner registers **one agent**, identified by `agent_id` (format: `AG_XXXX
 
 | Tool | Description |
 |---|---|
-| `get_agent_balance` | Fiat or stablecoin balance |
+| `get_agent_balance` | Fiat, stablecoin, or native token balance |
 | `agent_create_fiat_order` | Fiat payout from agent balance |
 | `get_agent_fiat_order_status` | Status of an agent fiat payout |
 | `agent_create_stablecoin_order` | Send USDT/USDC to a blockchain address |
@@ -97,13 +97,19 @@ get_agent(agent_id)                  → confirm policies
 **Fiat:**
 
 ```
-get_agent_balance(agent_id, currency_code: "UGX")
+get_agent_balance(agent_id, asset_type: "fiat", currency_code: "UGX")
 ```
 
 **Stablecoin:**
 
 ```
-get_agent_balance(agent_id, asset_code: "USDT", network: "celo")
+get_agent_balance(agent_id, asset_type: "stablecoin", asset_code: "USDT", network: "celo")
+```
+
+**Native token:**
+
+```
+get_agent_balance(agent_id, asset_type: "native", asset_code: "CELO", network: "celo")
 ```
 
 ### Agent fiat payout

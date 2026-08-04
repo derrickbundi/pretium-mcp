@@ -110,12 +110,12 @@ export function registerGetAgentTool(server, api) {
 export function registerGetAgentBalanceTool(server, api) {
   server.tool(
     "get_agent_balance",
-    "Get the current balance for an agent — either fiat payout balance or stablecoin settlement balance. Requires the agent_id returned from register_agent.",
+    "Get the current balance for an agent — fiat payout balance, on-chain stablecoin balance, or native token balance (e.g. CELO, ETH, BNB, SOL, XLM). Requires the agent_id returned from register_agent.",
     {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),
       asset_type: z
-        .enum(["fiat", "stablecoin"])
-        .describe("Whether to fetch fiat balance or stablecoin balance"),
+        .enum(["fiat", "stablecoin", "native"])
+        .describe("Whether to fetch fiat, stablecoin, or native token balance"),
       currency_code: z
         .string()
         .optional()
@@ -123,11 +123,15 @@ export function registerGetAgentBalanceTool(server, api) {
       asset_code: z
         .string()
         .optional()
-        .describe("Stablecoin asset code, e.g. USDT, USDC — required when asset_type is 'stablecoin'"),
+        .describe(
+          "On-chain asset code — e.g. USDT, USDC for stablecoin; CELO, ETH, BNB, SOL, XLM for native — required when asset_type is 'stablecoin' or 'native'"
+        ),
       network: z
         .enum(BLOCKCHAIN_NETWORKS)
         .optional()
-        .describe(`${BLOCKCHAIN_NETWORKS_DESC} — required when asset_type is 'stablecoin'`),
+        .describe(
+          `${BLOCKCHAIN_NETWORKS_DESC} — required when asset_type is 'stablecoin' or 'native'`
+        ),
     },
     {
       title: "Get Agent Balance",
@@ -140,11 +144,11 @@ export function registerGetAgentBalanceTool(server, api) {
       if (asset_type === "fiat" && !currency_code) {
         return toolErr("currency_code is required when asset_type is 'fiat'");
       }
-      if (asset_type === "stablecoin" && !asset_code) {
-        return toolErr("asset_code is required when asset_type is 'stablecoin'");
+      if ((asset_type === "stablecoin" || asset_type === "native") && !asset_code) {
+        return toolErr(`asset_code is required when asset_type is '${asset_type}'`);
       }
-      if (asset_type === "stablecoin" && !network) {
-        return toolErr("network is required when asset_type is 'stablecoin'");
+      if ((asset_type === "stablecoin" || asset_type === "native") && !network) {
+        return toolErr(`network is required when asset_type is '${asset_type}'`);
       }
 
       return callApi(() =>
