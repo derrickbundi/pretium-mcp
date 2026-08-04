@@ -125,10 +125,10 @@ export function registerGetAgentBalanceTool(server, api) {
         .optional()
         .describe("Stablecoin asset code, e.g. USDT, USDC — required when asset_type is 'stablecoin'"),
       network: z
-        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana"])
+        .enum(["celo", "base", "bnb", "polygon", "arbitrum", "avalanche", "solana", "stellar"])
         .optional()
         .describe(
-          "Blockchain network, e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana — required when asset_type is 'stablecoin'"
+          "Blockchain network, e.g. celo, base, bnb, polygon, arbitrum, avalanche, solana, stellar — required when asset_type is 'stablecoin'"
         ),
     },
     {
