@@ -110,7 +110,7 @@ export function registerGetAgentTool(server, api) {
 export function registerGetAgentBalanceTool(server, api) {
   server.tool(
     "get_agent_balance",
-    "Get the current balance for an agent — fiat payout balance, on-chain stablecoin balance, or native token balance (e.g. CELO, ETH, BNB, SOL, XLM). Requires the agent_id returned from register_agent.",
+    "Get the current balance for an agent — fiat payout balance, on-chain stablecoin balance, or native token balance (e.g. CELO, ETH, BNB, AVAX, SOL, XLM). Requires the agent_id returned from register_agent.",
     {
       agent_id: z.string().describe("ID of the agent returned from register_agent"),
       asset_type: z
@@ -124,7 +124,7 @@ export function registerGetAgentBalanceTool(server, api) {
         .string()
         .optional()
         .describe(
-          "On-chain asset code — e.g. USDT, USDC for stablecoin; CELO, ETH, BNB, SOL, XLM for native — required when asset_type is 'stablecoin' or 'native'"
+          "On-chain asset code — e.g. USDT, USDC for stablecoin; CELO, ETH, BNB, AVAX, SOL, XLM for native — required when asset_type is 'stablecoin' or 'native'"
         ),
       network: z
         .enum(BLOCKCHAIN_NETWORKS)

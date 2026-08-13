@@ -125,6 +125,7 @@ export function getAgentCard(baseUrl) {
           "What is my agent UGX balance?",
           "Check USDT balance for my agent on Celo",
           "What is my agent CELO balance?",
+          "Check AVAX balance for my agent on Avalanche",
         ],
         inputModes: ["application/json", "text/plain"],
         outputModes: ["application/json"],

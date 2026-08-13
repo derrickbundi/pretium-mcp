@@ -104,12 +104,14 @@ get_agent_balance(agent_id, asset_type: "fiat", currency_code: "UGX")
 
 ```
 get_agent_balance(agent_id, asset_type: "stablecoin", asset_code: "USDT", network: "celo")
+get_agent_balance(agent_id, asset_type: "stablecoin", asset_code: "USDC", network: "avalanche")
 ```
 
 **Native token:**
 
 ```
 get_agent_balance(agent_id, asset_type: "native", asset_code: "CELO", network: "celo")
+get_agent_balance(agent_id, asset_type: "native", asset_code: "AVAX", network: "avalanche")
 ```
 
 ### Agent fiat payout
